@@ -119,6 +119,7 @@ class OrdenDeTicketController extends Controller
 
     public function prueba()
     {
+        //$orden = OrdenDeTicket::find(rand(1,2));
         return view('prueba');
         //Mail::to("jafet.ramsell@gmail.com")->send(new BoletosPrePagados("UID_VM9nL3D19B4"));
     }

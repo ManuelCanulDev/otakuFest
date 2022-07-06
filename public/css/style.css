@@ -1635,7 +1635,6 @@ p {
 }
 
 .single-pricing .pricing-price {
-    background-image: url(../images/pricing-bg.jpg);
     background-position: center center;
     background-size: cover;
     position: relative;
@@ -1646,6 +1645,38 @@ p {
     margin-top: 35px;
 }
 
+.single-pricing .nady {
+    background-image: url(../images/cosplayers/6.jpg);
+}
+
+.single-pricing .chiki {
+    background-image: url(../images/cosplayers/7.jpeg);
+}
+
+.single-pricing .kion {
+    background-image: url(../images/cosplayers/3.png);
+}
+
+.single-pricing .melody {
+    background-image: url(../images/cosplayers/8.jpeg);
+}
+
+.single-pricing .kim {
+    background-image: url(../images/cosplayers/9.png);
+}
+
+.single-pricing .lyn {
+    background-image: url(../images/cosplayers/4.jpg);
+}
+
+.single-pricing .general {
+    background-image: url(../images/cosplayers/10.jpg);
+}
+
+.single-pricing .legendario {
+    background-image: url(../images/cosplayers/2.jpg);
+}
+
 .single-pricing .pricing-price::before {
     position: absolute;
     content: '';
@@ -1653,7 +1684,7 @@ p {
     height: 100%;
     top: 0;
     left: 0;
-    background-color: rgba(24, 99, 255, 0.85);
+    background-color: rgba(116, 101, 101, 0.392);
     z-index: -1;
 }
 

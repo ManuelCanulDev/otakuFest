@@ -169,52 +169,52 @@
     <section id="counter" class="counter-area pt-80 pb-130">
         <div class="container">
             <div class="row">
-                <!-- <div class="col-lg-3 col-sm-6">
+                <div class="col-lg-4 col-sm-4">
                     <div class="single-counter text-center mt-100 wow fadeIn" data-wow-duration="1s" data-wow-delay="0s">
                         <div class="counter-icon">
                             <i class="lni-mic"></i>
                         </div>
                         <div class="counter-content">
-                            <span class="count counter">20</span>
+                            <span class="count counter">4</span>
                             <p class="text">Speakers</p>
                         </div>
                     </div>
-                </div>single counter -->
-                <div class="col-lg-4 col-sm-6">
+                </div> <!--single counter -->
+                <div class="col-lg-4 col-sm-4">
                     <div class="single-counter text-center mt-100 wow fadeIn" data-wow-duration="1s"
                         data-wow-delay="0.3s">
                         <div class="counter-icon">
                             <i class="lni-bulb"></i>
                         </div>
                         <div class="counter-content">
-                            <span class="count counter">100</span>
+                            <span class="count counter">30</span>
                             <p class="text">Stands</p>
                         </div>
                     </div> <!-- single counter -->
                 </div>
-                <div class="col-lg-4 col-sm-6">
+                <div class="col-lg-4 col-sm-4">
                     <div class="single-counter text-center mt-100 wow fadeIn" data-wow-duration="1s"
                         data-wow-delay="0.6s">
                         <div class="counter-icon">
                             <i class="lni-briefcase"></i>
                         </div>
                         <div class="counter-content">
-                            <span class="count counter">20</span>
+                            <span class="count counter">6</span>
                             <p class="text">Concursos</p>
                         </div>
                     </div> <!-- single counter -->
                 </div>
-                <div class="col-lg-4 col-sm-6">
+                <!--<div class="col-lg-4 col-sm-6">
                     <div class="single-counter text-center mt-100 wow fadeIn" data-wow-duration="1s"
                         data-wow-delay="0.9s">
                         <div class="counter-icon">
                             <i class="lni-coffee-cup"></i>
                         </div>
                         <div class="counter-content">
-                            <span class="count counter">10</span>
+                            <span class="count counter"></span>
                             <p class="text">Lugares de Ramen</p>
                         </div>
-                    </div> <!-- single counter -->
+                    </div>  single counter -->
                 </div>
             </div> <!-- row -->
         </div> <!-- container -->
@@ -379,14 +379,22 @@
                         <div class="single-pricing text-center mt-30 wow fadeInLeft" data-wow-duration="1s"
                             data-wow-delay="0s">
                             <div class="pricing-name">
-                                <h4 class="pricing-title">{{$ticket->nombre_ticket}} </h4>
+                                <h4 class="pricing-title">{{ $ticket->nombre_ticket }} </h4>
                                 <!--<span class="sub-title">Price Excluding 20% VAT</span> -->
                             </div>
-                            <div class="pricing-price">
-                                <span>{{$ticket->costo_ticket}} MXN</span>
-                                <p class="text">Ambos Dias</p>
+                            <div class="pricing-price {{$ticket->class_background}}">
+                                <span>{{ $ticket->costo_ticket }} MXN</span>
+                                @if ($ticket->valido == 'U')
+                                    <p class="text">Un dia</p>
+                                @else
+                                    @if ($ticket->valido == 'D')
+                                        <p class="text">Ambos dia</p>
+                                    @else
+                                        <p class="text">Infinitamente</p>
+                                    @endif
+                                @endif
                             </div>
-                           <!-- <div class="pricing-list">
+                            <!-- <div class="pricing-list">
                                 <ul>
                                     <li>Pro Regular Seating</li>
                                     <li>Best Comfortable Seat</li>
@@ -424,27 +432,22 @@
             <div class="row client-active">
                 <div class="col-lg-3">
                     <div class="single-client">
-                        <img src="images/client-1.png" alt="Client">
+                        <img src="images/patrocinadores/mcd.png" alt="Client">
                     </div> <!-- single client -->
                 </div>
                 <div class="col-lg-3">
                     <div class="single-client">
-                        <img src="images/client-2.png" alt="Client">
+                        <img src="https://via.placeholder.com/150x150.png?text=Anunciate%20aqu%C3%AD" alt="Client">
                     </div> <!-- single client -->
                 </div>
                 <div class="col-lg-3">
                     <div class="single-client">
-                        <img src="images/client-3.png" alt="Client">
+                        <img src="images/patrocinadores/turqueza.jpeg" alt="Client">
                     </div> <!-- single client -->
                 </div>
                 <div class="col-lg-3">
                     <div class="single-client">
-                        <img src="images/client-4.png" alt="Client">
-                    </div> <!-- single client -->
-                </div>
-                <div class="col-lg-3">
-                    <div class="single-client">
-                        <img src="images/client-5.png" alt="Client">
+                        <img src="https://via.placeholder.com/150x150.png?text=Anunciate%20aqu%C3%AD" alt="Client">
                     </div> <!-- single client -->
                 </div>
             </div> <!-- row -->

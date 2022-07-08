@@ -5,7 +5,12 @@
 @endsection
 
 @section('content')
-    <section class="content container-fluid">
+    <section class="content container">
+        <div class="row mb-2">
+            <div class="col-md-6">
+                <a href="{{ route('orden-de-tickets.index') }}" class="btn btn-info" role="button">Regresar</a>
+            </div>
+        </div>
         <div class="row">
             <div class="col-md-12">
                 <div class="card">
@@ -13,13 +18,10 @@
                         <div class="float-left">
                             <span class="card-title">Show Orden De Ticket</span>
                         </div>
-                        <div class="float-right">
-                            <a class="btn btn-primary" href="{{ route('orden-de-tickets.index') }}"> Back</a>
-                        </div>
                     </div>
 
                     <div class="card-body">
-                        
+
                         <div class="form-group">
                             <strong>User Id:</strong>
                             {{ $ordenDeTicket->user_id }}

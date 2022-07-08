@@ -57,6 +57,10 @@ class OrdenDeTicket extends Model
     {
         return $this->hasOne('App\Models\User', 'id', 'user_id');
     }
-    
+
+    public function tickets()
+    {
+        return $this->hasMany('App\Models\Ticket','orden_id','id');
+    }
 
 }

@@ -172,7 +172,7 @@ class TicketController extends Controller
             }
         }
 
-        Mail::to($nuevaOrden->correo_orden)->send(new BoletosPrePagados($nuevaOrden->uid));
+        Mail::to($nuevaOrden->correo_orden)->send(new BoletosPrePagados($nuevaOrden->uid, $nuevaOrden->costo_total_orden));
 
         return redirect('/gracias-por-tu-compra/' . $nuevaOrden->uid);
     }
@@ -198,10 +198,12 @@ class TicketController extends Controller
 
         //$pdf = PDF::loadView('prueba', $data)->setPaper('a4', 'landscape');
 
+        $ticket = Ticket::where('token', $token)->firstOrFail();
+
         //return $pdf->download('onlinewebtutorblog.pdf');
 
 
-        $view = view('prueba');
+        $view = view('boleto-final',compact('ticket'));
         $html = $view->render();
         $html = preg_replace('/>\s+</', "><", $html);
         $pdf = PDF::loadHTML($html);

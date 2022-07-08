@@ -45,7 +45,17 @@ Route::get('/prueba', [OrdenDeTicketController::class, 'prueba'])->name('prueba'
 
 Route::get('ver-mis-boletos',[TicketController::class,'verMisBoletos'])->name('ver-mis-boletos')->middleware('auth');
 
-
 Route::get('/reenviarCorreoOrden/{uid}',[OrdenDeTicketController::class,'reenviarCorreoOrden'])->name('reenviarCorreoOrden')->middleware('auth');
 
-Route::get('/descargarBoletos/{uid}',[TicketController::class,'descargarBoletos'])->name('descargarBoletos')->middleware('auth');
+Route::get('/descargarBoletos/{token}',[TicketController::class,'descargarBoletos'])->name('descargarBoletos')->middleware('auth');
+
+Route::resource('orden-de-tickets',OrdenDeTicketController::class)->middleware(['auth','soloAdmin']);
+
+Route::get('asignar-boletos/{uid}',[OrdenDeTicketController::class,'asignarBoletos'])->middleware('auth')->name('asignar-boletos');
+
+
+Route::post('superAsignarBoletos',[OrdenDeTicketController::class,'superAsignarBoletos'])->middleware('auth')->name('superAsignarBoletos');
+
+
+Route::post('acreditarBoletosAjax',[OrdenDeTicketController::class,'acreditarBoletosAjax'])->middleware(['auth','soloAdmin'])->name('acreditarBoletosAjax');
+Route::post('desAcreditarBoletosAjax',[OrdenDeTicketController::class,'desAcreditarBoletosAjax'])->middleware(['auth','soloAdmin'])->name('desAcreditarBoletosAjax');

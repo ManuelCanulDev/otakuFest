@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\BoletosAcreditados;
 use App\Mail\BoletosPrePagados;
 use App\Mail\EmergencyCallReceived;
 use App\Models\OrdenDeTicket;
+use App\Models\Ticket;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
@@ -120,18 +122,80 @@ class OrdenDeTicketController extends Controller
     public function prueba()
     {
         //$orden = OrdenDeTicket::find(rand(1,2));
-        return view('prueba');
+        //return view('prueba');
         //Mail::to("jafet.ramsell@gmail.com")->send(new BoletosPrePagados("UID_VM9nL3D19B4"));
+        //Mail::to('manuelcanuldev@gmail.com')->send(new BoletosAcreditados('qweqweqwe'));
     }
 
     public function reenviarCorreoOrden($uid = null)
     {
         if($uid != null){
             $ordenTicket = OrdenDeTicket::where([['uid','=',$uid]])->get();
-            Mail::to($ordenTicket[0]->correo_orden)->send(new BoletosPrePagados($uid));
+            Mail::to($ordenTicket[0]->correo_orden)->send(new BoletosPrePagados($uid, $ordenTicket[0]->costo_total_orden));
             return redirect('/gracias-por-tu-compra/'.$uid);
         }else{
             return redirect('home');
         }
+    }
+
+    public function asignarBoletos($uid = null)
+    {
+        $orden = OrdenDeTicket::where('uid', $uid)->firstOrFail();
+
+        return view('asignar-boletos', compact('orden'));
+    }
+
+    public function superAsignarBoletos(Request $request)
+    {
+        $ticket = Ticket::find($request->ticket_id);
+
+
+        $ticket->nombres = $request->nombres;
+        $ticket->apellidos = $request->apellidos;
+        $ticket->telefono = $request->telefono;
+        $ticket->correo = $request->correo;
+        $ticket->save();
+
+        return redirect('asignar-boletos/'.$request->order_uid);
+    }
+
+    public function acreditarBoletosAjax(Request $request)
+    {
+        $orden = OrdenDeTicket::where('uid', $request->uid)->firstOrFail();
+
+        $orden->pagado = "SI";
+
+        $orden->save();
+
+        foreach ($orden->tickets as $llave => $ticket) {
+            $ticket = Ticket::find($ticket->id);
+
+            $ticket->pagado = true;
+            $ticket->status = "A";
+            $ticket->save();
+        }
+
+        Mail::to($orden->correo_orden)->send(new BoletosAcreditados($request->uid));
+
+        return redirect('orden-de-tickets');
+    }
+
+    public function desAcreditarBoletosAjax(Request $request)
+    {
+        $orden = OrdenDeTicket::where('uid', $request->uid)->firstOrFail();
+
+        $orden->pagado = "NO";
+
+        $orden->save();
+
+        foreach ($orden->tickets as $llave => $ticket) {
+            $ticket = Ticket::find($ticket->id);
+
+            $ticket->pagado = false;
+            $ticket->status = "D";
+            $ticket->save();
+        }
+
+        return redirect('orden-de-tickets');
     }
 }

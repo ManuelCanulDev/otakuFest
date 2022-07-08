@@ -62,7 +62,7 @@
                                                                 Boleto</a>
                                                         @else
                                                             <a role="button" class="btn btn-warning"
-                                                                href="/asignarBoleto/{{ $boleto->token }}">Asignar Boleto</a>
+                                                                href="/asignar-boletos/{{ $boleto->orden->uid }}">Asignar Boleto</a>
                                                         @endif
                                                     @else
                                                         {{ 'SIN PAGO ACREDITADO' }}

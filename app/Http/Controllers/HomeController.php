@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Ticket;
+use App\Models\TypeTicket;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -23,6 +25,19 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+        $tickets = TypeTicket::all();
+
+        $typeTicket = [];
+
+        foreach ($tickets as $key => $type) {
+            $cantidadDeTickets = Ticket::where([['type_ticket_id', '=', $type->id],['pagado','=',true],['status','=','A']])->get();
+            $cuantosTickets = $cantidadDeTickets->count();
+
+            $type['cuantos_quedan'] = $type->cuantos_ticket - $cuantosTickets;
+
+            array_push($typeTicket,$type);
+        }
+
+        return view('home', compact('typeTicket'));
     }
 }

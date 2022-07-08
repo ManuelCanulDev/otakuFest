@@ -72,6 +72,4 @@ class Ticket extends Model
     {
         return $this->hasOne('App\Models\OrdenDeTicket', 'id', 'orden_id');
     }
-
-
 }

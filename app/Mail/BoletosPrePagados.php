@@ -12,10 +12,12 @@ class BoletosPrePagados extends Mailable
     use Queueable, SerializesModels;
 
     public $orden;
+    public $cantidad;
 
-    public function __construct($orden)
+    public function __construct($orden, $cantidad)
     {
         $this->orden = $orden;
+        $this->cantidad = $cantidad;
     }
 
     /**

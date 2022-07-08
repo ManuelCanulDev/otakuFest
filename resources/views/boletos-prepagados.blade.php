@@ -161,7 +161,7 @@
                     </td>
                 </tr>
                 <tr>
-                    <td background="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSLv0It3FVbIuVZ4clbIAPkrog4wZ-0JiB-og&usqp=CAU" bgcolor="#222222" align="center" valign="top"
+                    <td background="https://www.xtrafondos.com/wallpapers/resoluciones/19/chica-anime-con-vestido-negro_1920x1080_3726.jpg" bgcolor="#222222" align="center" valign="top"
                         style="text-align: center; background-position: center center !important; background-size: cover !important;">
                         <div>
                             <table role="presentation" border="0" cellpadding="0" cellspacing="0" align="center"
@@ -205,7 +205,7 @@
                                 <td style="padding: 40px 40px 20px 40px; text-align: left;">
                                     <h1
                                         style="margin: 0; font-family: 'Montserrat', sans-serif; font-size: 20px; line-height: 26px; color: #333333; font-weight: bold;">
-                                        PASO #1 - REALIZA TU PAGO</h1>
+                                        PASO #1 - REALIZA TU PAGO DE {{ $cantidad }} MXN</h1>
                                 </td>
                             </tr>
                             <tr>

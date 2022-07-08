@@ -21,7 +21,7 @@
                                             <th scope="col">#</th>
                                             <th scope="col">Fecha de Vencimiento</th>
                                             <th scope="col">Costo Total</th>
-                                            <th scope="col">Pagado</th>
+                                            <th scope="col">Acción</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -30,7 +30,14 @@
                                                 <th scope="row">{{$orden->uid}}</th>
                                                 <td>{{$orden->fecha_vencimiento_orden}}</td>
                                                 <td>{{$orden->costo_total_orden}}</td>
-                                                <td>{{$orden->pagado}}</td>
+                                                <td>
+                                                    @if ($orden->pagado == "SI")
+                                                    <a class="btn btn-info btn-sm" href="/asignar-boletos/{{ $orden->uid }}">Asignar Boletos</a>
+                                                    @else
+                                                    PAGO NO ACREDITADO
+                                                    @endif
+
+                                                </td>
                                             </tr>
                                         @endforeach
                                     </tbody>

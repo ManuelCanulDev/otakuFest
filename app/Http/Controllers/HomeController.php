@@ -40,4 +40,11 @@ class HomeController extends Controller
 
         return view('home', compact('typeTicket'));
     }
+
+    public function mandarNotificacion()
+    {
+        $tipos = TypeTicket::all();
+
+        return view('notificacion', compact('tipos'));
+    }
 }

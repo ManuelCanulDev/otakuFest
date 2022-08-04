@@ -5,11 +5,14 @@ namespace App\Http\Controllers;
 use App\Mail\BoletosAcreditados;
 use App\Mail\BoletosPrePagados;
 use App\Mail\EmergencyCallReceived;
+use App\Mail\NotificacionOtakuFest;
 use App\Models\OrdenDeTicket;
 use App\Models\Ticket;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Redirect;
 
 /**
  * Class OrdenDeTicketController
@@ -115,7 +118,7 @@ class OrdenDeTicketController extends Controller
 
     public function verMisOrdenes()
     {
-        $ordenes = OrdenDeTicket::where([['user_id','=',Auth::user()->id]])->get();
+        $ordenes = OrdenDeTicket::where([['user_id', '=', Auth::user()->id]])->get();
         return view('verMisOrdenes', compact('ordenes'));
     }
 
@@ -124,16 +127,16 @@ class OrdenDeTicketController extends Controller
         //$orden = OrdenDeTicket::find(rand(1,2));
         //return view('prueba');
         //Mail::to("jafet.ramsell@gmail.com")->send(new BoletosPrePagados("UID_VM9nL3D19B4"));
-        //Mail::to('manuelcanuldev@gmail.com')->send(new BoletosAcreditados('qweqweqwe'));
+        //Mail::to('manuelcanuldev@gmail.com')->send(new NotificacionOtakuFest('Manuel','ESTO ES UN MENSAJE DE PRUEBA',''));
     }
 
     public function reenviarCorreoOrden($uid = null)
     {
-        if($uid != null){
-            $ordenTicket = OrdenDeTicket::where([['uid','=',$uid]])->get();
+        if ($uid != null) {
+            $ordenTicket = OrdenDeTicket::where([['uid', '=', $uid]])->get();
             Mail::to($ordenTicket[0]->correo_orden)->send(new BoletosPrePagados($uid, $ordenTicket[0]->costo_total_orden));
-            return redirect('/gracias-por-tu-compra/'.$uid);
-        }else{
+            return redirect('/gracias-por-tu-compra/' . $uid);
+        } else {
             return redirect('home');
         }
     }
@@ -154,9 +157,25 @@ class OrdenDeTicketController extends Controller
         $ticket->apellidos = $request->apellidos;
         $ticket->telefono = $request->telefono;
         $ticket->correo = $request->correo;
+
+        if ($ticket->type_ticket_id == 1) {
+            $ticket->fecha_asistencia = $request->fecha_asistencia;
+        }
+
         $ticket->save();
 
-        return redirect('asignar-boletos/'.$request->order_uid);
+        return redirect('asignar-boletos/' . $request->order_uid);
+    }
+
+    public function superAsignarBoletosOnlyFechaAsistencia(Request $request)
+    {
+        $ticket = Ticket::find($request->ticket_id);
+
+
+        $ticket->fecha_asistencia = $request->fecha_asistencia;
+        $ticket->save();
+
+        return redirect('asignar-boletos/' . $request->order_uid);
     }
 
     public function acreditarBoletosAjax(Request $request)
@@ -197,5 +216,42 @@ class OrdenDeTicketController extends Controller
         }
 
         return redirect('orden-de-tickets');
+    }
+
+    public function enviarNotificaciones(Request $request)
+    {
+        $oks = 0;
+        $bads = 0;
+
+        if ($request->grupo == "T") {
+            $usuarios = User::all();
+
+            foreach ($usuarios as $llave => $valor) {
+                try {
+                    Mail::to($valor->email)->send(new NotificacionOtakuFest(strtoupper($valor->name), $request->mensaje, $request->url));
+                    $oks++;
+                } catch (\Exception $th) {
+                    $bads++;
+                }
+            }
+        } else {
+            $usuariosParametrizados = Ticket::select('user_id')->where([['type_ticket_id','=',$request->grupo],['status','=','A']])->get()->groupBy('user_id');
+
+            //dd($usuariosParametrizados);
+
+            foreach ($usuariosParametrizados as $llave => $valore) {
+                echo $llave."<br>";
+                $usuario = User::find($llave);
+
+                try {
+                    Mail::to($usuario->email)->send(new NotificacionOtakuFest(strtoupper($usuario->name), $request->mensaje, $request->url));
+                    $oks++;
+                } catch (\Exception $th) {
+                    $bads++;
+                }
+            }
+        }
+
+        return Redirect::back()->withErrors(['msg' => 'Se han enviado: '.$oks.' notificaciones y han fallado en enviar: '.$bads]);
     }
 }

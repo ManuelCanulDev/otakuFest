@@ -59,9 +59,9 @@
                 <div class="panel panel-default">
                     <div class="panel-body">
                         <div class="event-meta">
-                            <div class="datetime">Fecha y Hora del Evento: <span
-                                    class="label label-default">{{ '04/08/2022 - 08:00 AM' }}</span></div>
-                            <div class="venue">Venue: <span
+                            <div class="datetime">FECHAS: <span
+                                    class="label label-default">{{ '06 Y 07 DE AGOSTO' }}</span></div>
+                            <div class="venue">DIRECCION: <span
                                     class="label label-info">{{ 'SINDICATO DE TAXISTAS' }}</span></div>
                         </div>
 
@@ -109,7 +109,7 @@
                                     <label for="phone">Ingrese un teléfono donde podemos ponernos en contacto contigo:</label>
                                     <div class="input-group">
                                         <input required id="phone" type="phone" name="phone" class="form-control"
-                                            placeholder="+52 000 000 000 0">
+                                            placeholder="000 000 000 0">
                                     </div>
                                     <br>
                                     <button class="btn btn-success" style="float: right">Solicitar Boletos</button>

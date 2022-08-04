@@ -96,6 +96,9 @@
                                     <li class="nav-item">
                                         <a class="page-scroll" href="#gallery">Galeria</a>
                                     </li>
+                                    <li class="nav-item">
+                                        <a class="page-scroll" href="#team">Invitados</a>
+                                    </li>
                                 </ul>
                             </div>
 
@@ -118,7 +121,7 @@
                 </div> <!-- row -->
                 <div class="row justify-content-center">
                     <div class="col-lg-10">
-                        <div data-countdown="2022/08/04"></div>
+                        <div data-countdown="2022/08/06"></div>
 
                         <div class="header-content text-center">
                             <ul class="header-btn">
@@ -221,7 +224,45 @@
     </section>
 
     <!--====== COUNTER PART ENDS ======-->
+    <section id="team" class="team-area pt-115 pb-130">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <div class="section-title text-center pb-20">
+                        <h2 class="title">Grandes Invitados</h2>
+                    </div> <!-- section title -->
+                </div>
+            </div> <!-- row -->
 
+            <div class="row">
+                <div class="col-lg-6 col-sm-6">
+                    <div class="single-team text-center mt-30 wow fadeIn" data-wow-duration="1s" data-wow-delay="0s">
+                        <div class="team-image">
+                            <img src="https://cdn2.mediotiempo.com/uploads/media/2020/12/18/mario-castaneda-tiene-mas-de.jpg" alt="Team">
+                        </div>
+                        <div class="team-content">
+                            <h4 class="team-name"><a href="#">Mario Castañeda</a></h4>
+                            <span class="sub-title">Actor de Doblaje</span>
+                        </div>
+                    </div> <!-- single team -->
+                </div>
+                <div class="col-lg-6 col-sm-6">
+                    <div class="single-team text-center mt-30 wow fadeIn" data-wow-duration="1s" data-wow-delay="0.5s">
+                        <div class="team-image">
+                            <br>
+                            <img src="https://i1.wp.com/www.senpai.com.mx/wp-content/uploads/2020/06/Enzo-Fortuny-voz-de-Inuyasha-celebra-su-cumpleanos-hoy.jpg" alt="Team">
+                            <br>
+                        </div>
+                        <div class="team-content">
+                            <h4 class="team-name"><a href="#">Enzo Fortuny</a></h4>
+                            <span class="sub-title">Actor de Doblaje</span>
+                        </div>
+                    </div> <!-- single team -->
+                </div>
+
+            </div> <!-- row -->
+        </div> <!-- container -->
+    </section>
     <!--====== TEAM PART START ======-->
 
     <section id="concursos" class="team-area pt-115 pb-130 gray-bg">

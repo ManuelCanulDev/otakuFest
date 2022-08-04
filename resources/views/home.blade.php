@@ -23,7 +23,7 @@
                                 <div class="row">
                                     <div class="col-md-6">
                                         <a role="button" class="btn btn-info w-100"
-                                            href="{{ URL::to('type-tickets') }}">{{ __('Type Tickets') }}</a>
+                                            href="{{ URL::to('type-tickets') }}">{{ __('Tipos de Tickets') }}</a>
                                     </div>
                                     <div class="col-md-6">
                                         <a role="button" class="btn btn-warning w-100"
@@ -34,6 +34,10 @@
                                     <div class="col-md-6">
                                         <a role="button" class="btn btn-success w-100"
                                             href="{{ URL::to('orden-de-tickets') }}">{{ __('Mis Ordenes') }}</a>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <a role="button" class="btn btn-warning w-100"
+                                            href="{{ URL::to('mandar-notificacion') }}">{{ __('Mandar Notificacion') }}</a>
                                     </div>
                                 </div>
                             @else

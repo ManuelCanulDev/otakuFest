@@ -29,14 +29,26 @@
                                     <tbody>
                                         @foreach ($boletos as $boleto)
                                             <tr>
-                                                <th scope="row">{{ $boleto->typeTicket->nombre_ticket }}</th>
+                                                <th scope="row">{{ $boleto->typeTicket->nombre_ticket }}
+                                                    @if ($boleto->type_ticket_id == 1)
+                                                    ({{ $boleto->fecha_asistencia }})
+                                                    @endif
+                                                </th>
                                                 <td>{{ $boleto->orden->uid }}</td>
                                                 <td>
 
-                                                    @if ($boleto->nombres != '' && $boleto->apellidos != '')
-                                                        {{ $boleto->nombres }} {{ $boleto->apellidos }}
+                                                    @if ($boleto->type_ticket_id == 1)
+                                                        @if ($boleto->nombres != '' && $boleto->apellidos != '' && $boleto->fecha_asistencia != '')
+                                                            {{ $boleto->nombres }} {{ $boleto->apellidos }}
+                                                        @else
+                                                            {{ 'NO ASIGNADO' }}
+                                                        @endif
                                                     @else
-                                                        {{ 'NO ASIGNADO' }}
+                                                        @if ($boleto->nombres != '' && $boleto->apellidos != '')
+                                                            {{ $boleto->nombres }} {{ $boleto->apellidos }}
+                                                        @else
+                                                            {{ 'NO ASIGNADO' }}
+                                                        @endif
                                                     @endif
 
                                                 </td>
@@ -55,17 +67,30 @@
                                                     @endif
                                                 </td>
                                                 <td>
-                                                    @if ($boleto->pagado)
-                                                        @if ($boleto->nombres != '' && $boleto->apellidos != '')
+                                                    @if ($boleto->type_ticket_id == 1)
+                                                        @if ($boleto->nombres != '' && $boleto->apellidos != '' && $boleto->fecha_asistencia != '')
                                                             <a role="button" class="btn btn-success"
                                                                 href="/descargarBoletos/{{ $boleto->token }}">Descargar
                                                                 Boleto</a>
                                                         @else
                                                             <a role="button" class="btn btn-warning"
-                                                                href="/asignar-boletos/{{ $boleto->orden->uid }}">Asignar Boleto</a>
+                                                                href="/asignar-boletos/{{ $boleto->orden->uid }}">Asignar
+                                                                Boleto</a>
                                                         @endif
                                                     @else
-                                                        {{ 'SIN PAGO ACREDITADO' }}
+                                                        @if ($boleto->pagado)
+                                                            @if ($boleto->nombres != '' && $boleto->apellidos != '')
+                                                                <a role="button" class="btn btn-success"
+                                                                    href="/descargarBoletos/{{ $boleto->token }}">Descargar
+                                                                    Boleto</a>
+                                                            @else
+                                                                <a role="button" class="btn btn-warning"
+                                                                    href="/asignar-boletos/{{ $boleto->orden->uid }}">Asignar
+                                                                    Boleto</a>
+                                                            @endif
+                                                        @else
+                                                            {{ 'SIN PAGO ACREDITADO' }}
+                                                        @endif
                                                     @endif
                                                 </td>
                                             </tr>

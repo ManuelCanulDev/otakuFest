@@ -13,7 +13,7 @@
             @media (max-width: 600px) {
                 .facet_sidebar {
                     position: absolute;
-                    top: 420px;
+                    top: 480px;
                     left: 100px;
                     width: 250px;
                 }
@@ -63,15 +63,27 @@
                                 </div>
                             </div>
 
-                            <div class="row mb-0">
-                                <div class="col-md-8 offset-md-4">
+                            <div class="row mb-0 text-center">
+                                <div class="col-md-12">
                                     <button type="submit" class="btn btn-primary">
                                         {{ __('Iniciar Sesión') }}
                                     </button>
-
+                                </div>
+                            </div>
+                            <div class="row text-center">
+                                <div class="col-md-12">
                                     @if (Route::has('password.request'))
                                         <a class="btn btn-link" href="{{ route('password.request') }}">
                                             {{ __('Olvidaste tu contraseña?') }}
+                                        </a>
+                                    @endif
+                                </div>
+                            </div>
+                            <div class="row text-center">
+                                <div class="col-md-12">
+                                    @if (Route::has('register'))
+                                        <a class="btn btn-link" href="{{ route('register') }}">
+                                            {{ __('Crea tu cuenta para conseguir tus boletos.') }}
                                         </a>
                                     @endif
                                 </div>

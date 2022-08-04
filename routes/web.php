@@ -5,7 +5,9 @@ use App\Http\Controllers\OrdenDeTicketController;
 use App\Http\Controllers\TicketController;
 use App\Http\Controllers\TypeTicketController;
 use App\Models\OrdenDeTicket;
+use App\Models\Ticket;
 use App\Models\TypeTicket;
+use FontLib\Table\Type\name;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -21,8 +23,20 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    $typeTickets = TypeTicket::all();
-    return view('welcome',compact('typeTickets'));
+    $tickets = TypeTicket::all();
+
+    $typeTickets = [];
+
+    foreach ($tickets as $key => $type) {
+        $cantidadDeTickets = Ticket::where([['type_ticket_id', '=', $type->id], ['pagado', '=', true], ['status', '=', 'A']])->get();
+        $cuantosTickets = $cantidadDeTickets->count();
+
+        $type['cuantos_quedan'] = $type->cuantos_ticket - $cuantosTickets;
+
+        array_push($typeTickets, $type);
+    }
+
+    return view('welcome', compact('typeTickets'));
 });
 
 Auth::routes();
@@ -56,6 +70,11 @@ Route::get('asignar-boletos/{uid}',[OrdenDeTicketController::class,'asignarBolet
 
 Route::post('superAsignarBoletos',[OrdenDeTicketController::class,'superAsignarBoletos'])->middleware('auth')->name('superAsignarBoletos');
 
+Route::post('superAsignarBoletosOnlyFechaAsistencia',[OrdenDeTicketController::class,'superAsignarBoletosOnlyFechaAsistencia'])->middleware('auth')->name('superAsignarBoletosOnlyFechaAsistencia');
 
 Route::post('acreditarBoletosAjax',[OrdenDeTicketController::class,'acreditarBoletosAjax'])->middleware(['auth','soloAdmin'])->name('acreditarBoletosAjax');
 Route::post('desAcreditarBoletosAjax',[OrdenDeTicketController::class,'desAcreditarBoletosAjax'])->middleware(['auth','soloAdmin'])->name('desAcreditarBoletosAjax');
+
+Route::get('mandar-notificacion',[HomeController::class,'mandarNotificacion'])->middleware('auth','soloAdmin')->name('mandar-notificacion');
+
+Route::post('enviarNotificaciones',[OrdenDeTicketController::class,'enviarNotificaciones'])->middleware(['auth','soloAdmin'])->name('enviarNotificaciones');

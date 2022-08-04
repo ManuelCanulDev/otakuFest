@@ -208,6 +208,6 @@ class TicketController extends Controller
         $html = preg_replace('/>\s+</', "><", $html);
         $pdf = PDF::loadHTML($html);
 
-        return $pdf->download('asd.pdf');
+        return $pdf->download('TICKET_OTAKU_FEST_2022.pdf');
     }
 }

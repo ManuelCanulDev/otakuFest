@@ -41,7 +41,7 @@
 
                     <tr>
                         <td width="5px" style="padding: 0;"></td>
-                        <img src="images/<?php echo rand(1,3); ?>.png" alt="Shen long" width="450"
+                        <img src="images/{{ rand(1,3) }}.png" alt="Imagen de Fondo" width="450"
                             style="position: absolute; opacity: 0.3;">
                         <td bgcolor="#FFFFFF"
                             style="border: 1px solid #000; clear: both; display: block; margin: 0 auto; max-width: 600px; padding: 0;">
@@ -67,7 +67,11 @@
                                     <tr align="center">
                                         <td width="100%" style="padding: 20px;">
                                             <strong style="color: #333; font-size: 20px;">DESCRIPCION: UN BOLETO
-                                                {{ $ticket->typeTicket->nombre_ticket }}</strong>
+                                                {{ $ticket->typeTicket->nombre_ticket }}
+
+                                            @if ($ticket->type_ticket_id == 1)
+                                                ({{$ticket->fecha_asistencia}})
+                                            @endif</strong>
 
                                         </td>
                                     </tr>

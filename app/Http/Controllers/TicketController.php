@@ -6,6 +6,7 @@ use App\Mail\BoletosPrePagados;
 use App\Models\OrdenDeTicket;
 use App\Models\Ticket;
 use App\Models\TypeTicket;
+use App\Models\User;
 use Carbon\CarbonImmutable;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -209,5 +210,88 @@ class TicketController extends Controller
         $pdf = PDF::loadHTML($html);
 
         return $pdf->download('TICKET_OTAKU_FEST_2022.pdf');
+    }
+
+    public function verificarBoleto(Request $request)
+    {
+        $token_boleto = $request->get('token_boleto');
+
+        $ticket = Ticket::where('token',$token_boleto)->first();
+
+        //VALIDAR SI EL BOLETO EXISTE
+        if($ticket != null){
+
+            if($ticket->nombres == ''){
+                return response(['status' => false, 'system_msg' => 'bad', 'mensaje' => Str::upper('No tiene asignado nombre.'), 'data' => ['tipo_de_ticket' => $ticket->typeTicket->nombre_ticket, 'orden_de_compra' => $ticket->orden->uid, 'nombre_asistente' => $ticket->nombres." ".$ticket->apellidos]],400);
+            }
+
+            if($ticket->apellidos == ''){
+                return response(['status' => false, 'system_msg' => 'bad', 'mensaje' => Str::upper('No tiene asignado apellidos.'), 'data' => ['tipo_de_ticket' => $ticket->typeTicket->nombre_ticket, 'orden_de_compra' => $ticket->orden->uid, 'nombre_asistente' => $ticket->nombres." ".$ticket->apellidos]],400);
+            }
+
+            if(!$ticket->pagado){
+                return response(['status' => false, 'system_msg' => 'bad', 'mensaje' => Str::upper('No tiene pagado este boleto.'), 'data' => ['tipo_de_ticket' => $ticket->typeTicket->nombre_ticket, 'orden_de_compra' => $ticket->orden->uid, 'nombre_asistente' => $ticket->nombres." ".$ticket->apellidos]],400);
+            }
+
+            if($ticket->status != 'A'){
+                return response(['status' => false, 'system_msg' => 'bad', 'mensaje' => Str::upper('No tiene aprobado este boleto.'), 'data' => ['tipo_de_ticket' => $ticket->typeTicket->nombre_ticket, 'orden_de_compra' => $ticket->orden->uid, 'nombre_asistente' => $ticket->nombres." ".$ticket->apellidos]],400);
+            }
+
+            $typeTicket = TypeTicket::find($ticket->type_ticket_id);
+
+            if($typeTicket->valido == 'U'){
+
+                //AGREGAR VALIDACION DE FECHA DE ASISTENCIA.
+                if($ticket->fecha_asistencia == null){
+                    return response(['status' => false, 'system_msg' => 'bad', 'mensaje' => Str::upper('Para este tipo de boleto, debe de seleccionar la fecha de asistencia.'), 'data' => ['tipo_de_ticket' => $ticket->typeTicket->nombre_ticket, 'orden_de_compra' => $ticket->orden->uid, 'nombre_asistente' => $ticket->nombres." ".$ticket->apellidos]],400);
+                }
+
+                if(date('Y-m-d') != $ticket->fecha_asistencia){
+                    return response(['status' => false, 'system_msg' => 'medium', 'mensaje' => Str::upper('La fecha del boleto, no es hoy. Verifique.'), 'data' => ['tipo_de_ticket' => $ticket->typeTicket->nombre_ticket, 'orden_de_compra' => $ticket->orden->uid, 'nombre_asistente' => $ticket->nombres." ".$ticket->apellidos]],400);
+                }
+
+                if($ticket->asistio && $ticket->quemado){
+                    return response(['status' => false, 'system_msg' => 'bad', 'mensaje' => Str::upper('Este boleto ya ha sido marcado como asistido.'), 'data' => ['tipo_de_ticket' => $ticket->typeTicket->nombre_ticket, 'orden_de_compra' => $ticket->orden->uid, 'nombre_asistente' => $ticket->nombres." ".$ticket->apellidos]],400);
+                }else{
+                    //MARCAR COMO QUEMADO Y MOSTRAR MENSAJE GOOD.
+                    $ticket->asistio = true;
+                    $ticket->quemado = true;
+                    $ticket->save();
+
+                    return response(['status' => true, 'system_msg' => 'good', 'mensaje' => Str::upper("BOLETO VALIDO, BIENVENIDO"), 'data' => ['tipo_de_ticket' => $ticket->typeTicket->nombre_ticket, 'orden_de_compra' => $ticket->orden->uid, 'nombre_asistente' => $ticket->nombres." ".$ticket->apellidos]],200);
+                }
+            }
+
+            if($typeTicket->valido == 'I'){
+                //YA NO ES NECESARIO VALIDAR NADA, HAY QUE MOSTRAR TODO GOOD.
+                return response(['status' => true, 'system_msg' => 'good', 'mensaje' => Str::upper("BOLETO VALIDO, BIENVENIDO"), 'data' => ['tipo_de_ticket' => $ticket->typeTicket->nombre_ticket, 'orden_de_compra' => $ticket->orden->uid, 'nombre_asistente' => $ticket->nombres." ".$ticket->apellidos]],200);
+            }
+
+            if($typeTicket->valido == 'D'){
+                if(!$ticket->asistio && !$ticket->quemado){
+                    //MARCAR COMO ASISTIO PERO NO QUEMAR
+                    $ticket->asistio = true;
+                    //$ticket->quemado = true;
+                    $ticket->save();
+                    return response(['status' => true, 'system_msg' => 'good', 'mensaje' => Str::upper("BOLETO VALIDO, DIA 1 CONFIRMADO"), 'data' => ['tipo_de_ticket' => $ticket->typeTicket->nombre_ticket, 'orden_de_compra' => $ticket->orden->uid, 'nombre_asistente' => $ticket->nombres." ".$ticket->apellidos]],200);
+                }
+
+                if($ticket->asistio && !$ticket->quemado){
+                    //QUEMAR EL BOLETO
+                    //$ticket->asistio = true;
+                    $ticket->quemado = true;
+                    $ticket->save();
+                    return response(['status' => true, 'system_msg' => 'good', 'mensaje' => Str::upper("BOLETO VALIDO, DIA 2 CONFIRMADO"), 'data' => ['tipo_de_ticket' => $ticket->typeTicket->nombre_ticket, 'orden_de_compra' => $ticket->orden->uid, 'nombre_asistente' => $ticket->nombres." ".$ticket->apellidos]],200);
+                }
+
+                if($ticket->asistio && $ticket->quemado){
+                    //DECIR QUE YA ESTA QUEMADO
+                    return response(['status' => false, 'system_msg' => 'bad', 'mensaje' => Str::upper('Este boleto ya ha sido marcado como asistido.'), 'data' => ['tipo_de_ticket' => $ticket->typeTicket->nombre_ticket, 'orden_de_compra' => $ticket->orden->uid, 'nombre_asistente' => $ticket->nombres." ".$ticket->apellidos]],400);
+                }
+            }
+
+        }else{
+            return response(['status' => false, 'system_msg' => 'bad', 'mensaje' => 'Este Boleto NO existe.', 'data' => ['tipo_de_ticket' => null, 'orden_de_compra' => null]],400);
+        }
     }
 }

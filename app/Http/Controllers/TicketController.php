@@ -291,7 +291,7 @@ class TicketController extends Controller
             }
 
         }else{
-            return response(['status' => false, 'system_msg' => 'bad', 'mensaje' => 'Este Boleto NO existe.', 'data' => ['tipo_de_ticket' => null, 'orden_de_compra' => null]],400);
+            return response(['status' => false, 'system_msg' => 'bad', 'mensaje' => 'Este Boleto NO existe.', 'data' => ['tipo_de_ticket' => null, 'orden_de_compra' => null,'nombre_asistente' => null]],400);
         }
     }
 }
